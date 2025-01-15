@@ -26,32 +26,50 @@ func main() {
 
 	return*/
 
-	a1 := `fяfa44by0c2\n3d5e`
-	a2 := "fяхfa44by0c2\n3d5e"
+	// a1 := `fяfa44by0c2\n3d5e`
+	a2 := "f3яхfa4by0c2\n3d5et"
 
-	fmt.Printf("%q %d\n", a1, len(a1))
-	fmt.Printf("%q %d\n", a2, len(a2))
+	// fmt.Printf("%T %q %d\n", a1, a1, len(a1))
+	fmt.Printf("%T %q %d\n", a2, a2, len(a2))
 
 	var b string // результирующая строка
-	var c string // текущий символ исходной строки
+	var p string // предыдущий символ исходной строки
 
 	for i, a := range a2 {
+		fmt.Printf("result => (string)%q;\n", b)
 		fmt.Printf("%d => (int)%v; char => %q\n", i, a, a)
 
-		if !unicode.IsDigit(a) {
-			fmt.Printf("%q not Number\n", a)
-			c = string(a)
-			// b += string(a)
-			// n = true
-		} else {
-			n, err := strconv.Atoi(string(a))
+		if p == "" {
+			if unicode.IsDigit(a) {
+				panic("ожидается буква")
+			}
+			p = string(a)
+			continue
+		}
+
+		count := 1
+
+		if unicode.IsDigit(a) {
+			digit, err := strconv.Atoi(string(a))
 			if err != nil {
 				panic("parse error")
 			}
-			fmt.Printf("%d a Number\n", n)
-			b += strings.Repeat(c, n)
+			fmt.Printf("%d is Number\n", digit)
+			count = digit
+		}
+
+		if count > 0 {
+			b += strings.Repeat(p, count)
+		}
+
+		if unicode.IsDigit(a) {
+			p = ""
+		} else {
+			p = string(a)
 		}
 	}
+	b += p
+
 	fmt.Printf("%q", b)
 
 	return
