@@ -2,55 +2,50 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"regexp"
+	"os"
 	"strconv"
 	"strings"
 	"unicode"
 )
 
 func main() {
-	const r1 = '€'
-	fmt.Println("(int32) r1:", r1)
-	fmt.Printf("(HEX) r1: %x\n", r1)
-	fmt.Printf("(as a String) r1: %s\n", r1)
-	fmt.Printf("(as a character) r1: %c\n", r1)
 
-	/*aString := []byte("Miхаlis")
-	// aString := "Miхаlis"
-	for x, y := range aString {
-		fmt.Println(x, y, unicode.IsSymbol(rune(y)))
-		fmt.Printf("Elem[x]: %c, Char y: %c\n", aString[x], y)
+	var a1 string
+
+	for {
+		_, err := fmt.Fscanln(os.Stdin, &a1)
+		if err != nil {
+			panic("input err: " + err.Error())
+		}
+		// fmt.Println(a1)
+		fmt.Printf("%q\n", unpack(a1))
 	}
-	fmt.Printf("%s\n", aString)
 
-	return*/
+	a := "f3я1х2fa4by0c2\n3d5t"
+	s := unpack(a)
 
-	// a1 := `fяfa44by0c2\n3d5e`
-	a2 := "f3яхfa4by0c2\n3d5et"
+	fmt.Printf("%q\n", s)
+}
 
-	// fmt.Printf("%T %q %d\n", a1, a1, len(a1))
-	fmt.Printf("%T %q %d\n", a2, a2, len(a2))
+func unpack(a1 string) string {
 
-	var b string // результирующая строка
+	var s string // результирующая строка
 	var p string // предыдущий символ исходной строки
 
-	for i, a := range a2 {
-		fmt.Printf("result => (string)%q;\n", b)
-		fmt.Printf("%d => (int)%v; char => %q\n", i, a, a)
+	for _, i := range a1 {
 
-		if p == "" {
-			if unicode.IsDigit(a) {
+		if p == "" { // проверка буквы из каждой пары "символ-цифра"
+			if unicode.IsDigit(i) {
 				panic("ожидается буква")
 			}
-			p = string(a)
+			p = string(i)
 			continue
 		}
 
-		count := 1
+		count := 1 // если цифра отсутствует
 
-		if unicode.IsDigit(a) {
-			digit, err := strconv.Atoi(string(a))
+		if unicode.IsDigit(i) { // проверка цифры из каждой пары
+			digit, err := strconv.Atoi(string(i))
 			if err != nil {
 				panic("parse error")
 			}
@@ -58,90 +53,17 @@ func main() {
 			count = digit
 		}
 
-		if count > 0 {
-			b += strings.Repeat(p, count)
+		if count > 0 { // исключаем символ с нулём
+			s += strings.Repeat(p, count)
 		}
 
-		if unicode.IsDigit(a) {
+		if unicode.IsDigit(i) { // завершаем обработку пары "символ-цифра"
 			p = ""
 		} else {
-			p = string(a)
+			p = string(i)
 		}
 	}
-	b += p
+	s += p // чтобы не забыть крайний символ
 
-	fmt.Printf("%q", b)
-
-	return
-}
-
-func unpack(a string) string {
-
-	r, err := regexp.Compile("[[:alpha:][:space:]]{1}[[:digit:]]?")
-	if err != nil {
-		log.Fatal("regexp compile error")
-	}
-	s := r.FindAllStringSubmatch(a, 100)
-	fmt.Println(s)
-
-	var c string
-	for _, s2 := range s {
-		for _, s3 := range s2 {
-			fmt.Printf("%#v\n", s3)
-			c += decode(s3)
-		}
-	}
-
-	return c
-}
-
-func unpack2(a string) string {
-
-	// var b []rune
-	// var i int
-
-	for _, c := range a {
-		fmt.Printf("%c --> %d\n", c, c)
-		fmt.Printf("%c is digit == %t\n", c, unicode.IsDigit(c))
-	}
-
-	return a
-}
-
-func decode(s string) string {
-	var c []byte
-	var d int = 1
-
-	if len(s) > 1 && unicode.IsDigit(rune(s[1])) {
-		d, _ = strconv.Atoi(string(s[1]))
-	}
-
-	for i := 0; i < d; i++ {
-		c = append(c, s[0])
-	}
-
-	return string(c)
-}
-
-func hello() {
-
-	s := "Hello, Мир!" // 11 -> 14
-
-	for i := 0; i < len(s); i++ {
-		fmt.Printf("%c ", s[i]) // Hello, ABCDEF!
-	}
-
-	fmt.Println()
-
-	for _, r := range s {
-		fmt.Printf("%c ", r) // Hello, Мир!
-	}
-
-	fmt.Println()
-
-	for i, _ := range s { //
-		fmt.Printf("%c ", s[i]) // Hello, ACE!
-	}
-
-	fmt.Println()
+	return s
 }
