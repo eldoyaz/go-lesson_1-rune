@@ -16,6 +16,7 @@ func main() {
 	Вариант 1. Ручной ввод строки в консоли
 	*/
 	for {
+		fmt.Print("Введите строку: ")
 		_, err := fmt.Fscanln(os.Stdin, &a1)
 		if err != nil {
 			if err.Error() == "unexpected newline" {
@@ -30,9 +31,8 @@ func main() {
 	/**
 	Вариант 2. Строка задана в переменной
 	*/
-	a1 = "f3я1х2fa4by0c2\n3d5t"
-
-	fmt.Printf("%q ==> \n%q\n", a1, unpack(a1))
+	// a1 = "f3я1х2fa4by0c2\n3d5t"
+	// fmt.Printf("%q ==> \n%q\n", a1, unpack(a1))
 }
 
 func unpack(a1 string) string {
@@ -44,7 +44,7 @@ func unpack(a1 string) string {
 
 		if p == "" { // проверка буквы из каждой пары "символ-цифра"
 			if unicode.IsDigit(i) {
-				println("warn: ожидается символ")
+				println("некорректная строка (ожидается символ)")
 				return ""
 			}
 			p = string(i)
