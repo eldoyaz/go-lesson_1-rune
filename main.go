@@ -45,7 +45,7 @@ func unpack(a1 string) string {
 	var p string // предыдущий символ исходной строки
 
 	for _, i := range a1 {
-		fmt.Printf("%q\n", i)
+		// fmt.Printf("%q\n", i)
 
 		if p == "" { // проверка буквы из каждой пары "символ-цифра"
 			if unicode.IsDigit(i) {
