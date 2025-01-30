@@ -13,7 +13,16 @@ func main() {
 	var a1 string
 
 	/**
-	Вариант 1. Ручной ввод строки в консоли
+	_____________________________________
+	Вариант 1. Строка задана в переменной
+	*/
+	a1 = "f3я\\2х3fa4by0c2\n3d5t"
+	a1 = `f3я\2х3fa4by0c2\\n3d\5t` // @todo
+	fmt.Printf("%q ==> \n%q\n", a1, unpack(a1))
+
+	/**
+	_______________________________________
+	Вариант 2. Ручной ввод строки в консоли
 	*/
 	for {
 		fmt.Print("Введите строку: ")
@@ -28,11 +37,6 @@ func main() {
 		fmt.Printf("%q\n", unpack(a1))
 	}
 
-	/**
-	Вариант 2. Строка задана в переменной
-	*/
-	// a1 = "f3я1х2fa4by0c2\n3d5t"
-	// fmt.Printf("%q ==> \n%q\n", a1, unpack(a1))
 }
 
 func unpack(a1 string) string {
@@ -41,6 +45,7 @@ func unpack(a1 string) string {
 	var p string // предыдущий символ исходной строки
 
 	for _, i := range a1 {
+		fmt.Printf("%q\n", i)
 
 		if p == "" { // проверка буквы из каждой пары "символ-цифра"
 			if unicode.IsDigit(i) {
