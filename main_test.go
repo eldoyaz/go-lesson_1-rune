@@ -11,7 +11,6 @@ func Test_unpack(t *testing.T) {
 		args args
 		want string
 	}{
-		// TODO: Add test cases.
 		{"test1", args{"a1"}, "a"},
 		{"test2", args{"a0b"}, "b"},
 		{"test3", args{"a2b3"}, "aabbb"},
