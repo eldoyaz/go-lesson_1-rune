@@ -12,19 +12,27 @@ func main() {
 
 	var a1 string
 
+	/**
+	Вариант 1. Ручной ввод строки в консоли
+	*/
 	for {
 		_, err := fmt.Fscanln(os.Stdin, &a1)
 		if err != nil {
+			if err.Error() == "unexpected newline" {
+				continue
+			}
 			panic("input err: " + err.Error())
 		}
-		// fmt.Println(a1)
+
 		fmt.Printf("%q\n", unpack(a1))
 	}
 
-	a := "f3я1х2fa4by0c2\n3d5t"
-	s := unpack(a)
+	/**
+	Вариант 2. Строка задана в переменной
+	*/
+	a1 = "f3я1х2fa4by0c2\n3d5t"
 
-	fmt.Printf("%q\n", s)
+	fmt.Printf("%q ==> \n%q\n", a1, unpack(a1))
 }
 
 func unpack(a1 string) string {
@@ -36,7 +44,8 @@ func unpack(a1 string) string {
 
 		if p == "" { // проверка буквы из каждой пары "символ-цифра"
 			if unicode.IsDigit(i) {
-				panic("ожидается буква")
+				println("warn: ожидается символ")
+				return ""
 			}
 			p = string(i)
 			continue
@@ -49,7 +58,7 @@ func unpack(a1 string) string {
 			if err != nil {
 				panic("parse error")
 			}
-			fmt.Printf("%d is Number\n", digit)
+			// fmt.Printf("%d is Number\n", digit)
 			count = digit
 		}
 
