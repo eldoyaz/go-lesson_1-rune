@@ -57,10 +57,8 @@ func main() {
 		fmt.Print("Введите строку: ")
 		_, err := fmt.Fscanln(os.Stdin, &a1)
 		if err != nil {
-			if err.Error() == newLineErr.Error() {
-				continue
-			}
-			if err.Error() == noNewLineErr.Error() {
+			switch err.Error() {
+			case newLineErr.Error(), noNewLineErr.Error():
 				continue
 			}
 			panic("input err: " + err.Error())

@@ -1,7 +1,6 @@
 package packer
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 	"unicode"
@@ -13,7 +12,7 @@ func Unpack(a1 string) string {
 	var p string // предыдущий символ исходной строки
 
 	for _, i := range a1 {
-		fmt.Printf("%q\n", i)
+		// fmt.Printf("%q\n", i)
 
 		if p == "" { // проверка буквы из каждой пары "символ-цифра"
 			if unicode.IsDigit(i) {
@@ -59,15 +58,15 @@ func Pack(a1 string) string {
 	for _, i := range a1 {
 		// fmt.Printf("%q\n", i)
 
-		if unicode.IsDigit(i) {
-			println("некорректная строка (ожидается символ)")
-			return ""
-		}
-
 		if p == "" { // init
 			p = string(i)
 			count = 1
 			continue
+		}
+
+		if unicode.IsDigit(i) {
+			println("некорректная строка (ожидается символ)")
+			return ""
 		}
 
 		if string(i) == p {
