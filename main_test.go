@@ -16,6 +16,7 @@ func Test_unpack(t *testing.T) {
 		{"test2", args{"a0b"}, "b"},
 		{"test3", args{"a2b3"}, "aabbb"},
 		{"test4", args{"a2\n3"}, "aa\n\n\n"},
+		{"test5", args{"a2b 3"}, "aab   "},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
