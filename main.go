@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"strconv"
@@ -8,27 +9,27 @@ import (
 	"unicode"
 )
 
+var newLineErr = errors.New("unexpected newline")
+
 func main() {
 
 	var a1 string
 
-	/**
-	_____________________________________
+	/** _________________________________
 	Вариант 1. Строка задана в переменной
 	*/
 	a1 = "f3я\\2х3fa4by0c2\n3d5t"
-	a1 = `f3я\2х3fa4by0c2\\n3d\5t` // @todo
+	// a1 = `f3я\2х3\\nfa4by0c2\\n3d\5t` // @todo
 	fmt.Printf("%q ==> \n%q\n", a1, unpack(a1))
 
-	/**
-	_______________________________________
+	/** ___________________________________
 	Вариант 2. Ручной ввод строки в консоли
 	*/
 	for {
 		fmt.Print("Введите строку: ")
 		_, err := fmt.Fscanln(os.Stdin, &a1)
 		if err != nil {
-			if err.Error() == "unexpected newline" {
+			if err.Error() == newLineErr.Error() {
 				continue
 			}
 			panic("input err: " + err.Error())
