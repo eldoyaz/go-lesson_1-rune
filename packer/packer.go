@@ -7,12 +7,13 @@ import (
 )
 
 func Unpack(a1 string) string {
+	// fmt.Printf("%s\n", a1)
 
 	var s string // результирующая строка
 	var p string // предыдущий символ исходной строки
 
 	for _, i := range a1 {
-		// fmt.Printf("%q\n", i)
+		// fmt.Printf("%c\n", i)
 
 		if p == "" { // проверка буквы из каждой пары "символ-цифра"
 			if unicode.IsDigit(i) {
