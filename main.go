@@ -11,18 +11,19 @@ import (
 var newLineErr = errors.New("expected newline")
 var noNewLineErr = errors.New("unexpected newline")
 
+const input = "--input"
+
 func main() {
 
 	var flag1 string
 	if len(os.Args) > 1 {
-		flag1 = os.Args[2]
+		flag1 = os.Args[1]
 	}
 	fmt.Println("flag", flag1)
-	// return
 
 	var fn1 func(string) string
 	switch flag1 {
-	case "--unpack", "--daemon", "--input":
+	case "--unpack", "--daemon", input:
 		fn1 = packer.Unpack
 		println("режим Распаковки")
 	case "--pack":
@@ -33,9 +34,20 @@ func main() {
 		println("ожидается: --pack, --unpack, --daemon, --input q1w2e3")
 		return
 	}
-	_ = fn1("")
 
 	var a1 string
+
+	if flag1 == input {
+		if len(os.Args) < 3 {
+			println("некорректный аргумент")
+			println("ожидается: строка после", input)
+			return
+		}
+		a1 = os.Args[2]
+
+		fmt.Printf("%q ==> \n%q\n", a1, packer.Unpack(a1))
+		return
+	}
 
 	/** _________________________________
 	Вариант 1. Строка задана в переменной
