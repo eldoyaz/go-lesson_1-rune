@@ -1,0 +1,11 @@
+что почитать:
+Strings.builder{}
+pkg flag, pflag
+test with errors
+строка - массив ?
+len(строка) = длина массива
+
+s1 := "Hello, World!"
+    s2 := []rune(s1)
+    // memory -> s1 = 8B+8B = 16B + 13B = 29B
+    // memory -> s2 = 13*4=52B 8B*3 = 24B + 52B = 76B + 29B + 29B

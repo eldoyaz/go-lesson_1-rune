@@ -1,6 +1,7 @@
 package packer
 
 import (
+	"errors"
 	"strconv"
 	"strings"
 	"unicode"
@@ -89,4 +90,47 @@ func Pack(a1 string) string {
 	}
 
 	return s
+}
+
+func Unpack1(input string) (string, error) {
+	// fmt.Printf("%s\n", a1)
+
+	resultStr := strings.Builder{}
+	var prevChar rune // предыдущий символ исходной строки
+
+	for _, char := range input { // разбираем входящую строку на символы
+		// fmt.Printf("%c\n", i)
+
+		if prevChar == 0 { // проверка "ведущей буквы" из каждой пары "символ-цифра"
+			if unicode.IsDigit(char) {
+				return "", errors.New("ожидается символ")
+			}
+			prevChar = char
+			continue
+		}
+
+		count := 1 // если цифра отсутствует
+
+		if unicode.IsDigit(char) { // проверка цифры из каждой пары
+			digit, err := strconv.Atoi(string(char))
+			if err != nil {
+				return "", errors.New("digit parse error")
+			}
+			// fmt.Printf("%d is Number\n", digit)
+			count = digit
+		}
+
+		if count > 0 { // исключаем символ с нулём
+			resultStr.WriteString(strings.Repeat(string(prevChar), count))
+		}
+
+		if unicode.IsDigit(char) { // завершаем обработку пары "символ-цифра"
+			prevChar = 0
+		} else {
+			prevChar = char
+		}
+	}
+	resultStr.WriteRune(prevChar) // чтобы не забыть крайний символ
+
+	return resultStr.String(), nil
 }
