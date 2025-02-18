@@ -23,13 +23,12 @@ func TestUnpack(t *testing.T) {
 				t.SkipNow()
 			}
 			if got != tt.want {
-				t.Errorf("Unpack(%q) != %q", tt.input, got)
+				t.Errorf("Unpack(%q) != %q", tt.input, tt.want)
 			} else {
 				t.Logf("[OK] Unpack(%q) == %q", tt.input, tt.want)
 			}
 		})
 	}
-
 }
 
 func TestUnpackErrors(t *testing.T) {
@@ -55,32 +54,28 @@ func TestUnpackErrors(t *testing.T) {
 }
 
 func TestPack(t *testing.T) {
-	type args struct {
-		a1 string
-	}
 	tests := []struct {
-		name string
-		args args
-		want string
+		input string
+		want  string
 	}{
-		{"test0", args{""}, ""},
-		{"test1", args{"a1"}, "a"},
-		{"test2", args{"aabbb"}, "a2b3"},
-		{"test3", args{"a_bbb\n\n\t   "}, "a_b3\n2\t 3"},
+		{"", ""},
+		{"a", "a1"},
+		{"aabbb", "a2b3"},
+		{"a_bbb\n\n\t   ", "a_b3\n2\t 3"},
 	}
+
 	for _, tt := range tests {
-		a1 := tt.args.a1
-		t.Run(tt.name, func(t *testing.T) {
-			var got string
-			if got = Pack(a1); got != tt.want {
-				if got == "" {
-					t.Errorf("pack(%q)", a1)
-					// t.SkipNow()
-					return
-				}
-				t.Errorf("pack() != %q, want %q", got, tt.want)
+		t.Run(tt.input, func(t *testing.T) {
+
+			got, err := Pack(tt.input)
+			if err != nil {
+				t.Errorf("текст ошибки: %q", err.Error())
+				t.SkipNow()
+			}
+			if got != tt.want {
+				t.Errorf("Pack(%q) != %q", tt.input, tt.want)
 			} else {
-				t.Logf("pack(%q) == %q", a1, got)
+				t.Logf("[OK] Pack(%q) == %q", tt.input, tt.want)
 			}
 		})
 	}
