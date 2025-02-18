@@ -21,7 +21,7 @@ func main() {
 	}
 	fmt.Println("flag", flag1)
 
-	var fn1 func(string) string
+	var fn1 func(string) (string, error)
 
 	switch flag1 {
 	case "--unpack", "--daemon", input:
@@ -46,7 +46,12 @@ func main() {
 		}
 		a1 = os.Args[2]
 
-		fmt.Printf("%q ==> \n%q\n", a1, packer.Unpack(a1))
+		unpack, err := packer.Unpack(a1)
+		if err != nil {
+			println("ошибка распаковки: " + err.Error())
+			return
+		}
+		fmt.Printf("%q ==> \n%q\n", a1, unpack)
 		return
 	}
 
@@ -77,6 +82,11 @@ func main() {
 			panic("input err: " + err.Error())
 		}
 
-		fmt.Printf("%q\n", fn1(a1))
+		str, err := fn1(a1)
+		if err != nil {
+			println("ошибка (у/рас)паковки: " + err.Error())
+			return
+		}
+		fmt.Printf("%q\n", str)
 	}
 }
