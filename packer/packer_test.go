@@ -4,43 +4,51 @@ import "testing"
 
 func TestUnpack(t *testing.T) {
 	tests := []struct {
-		name string
-		args string
-		want string
+		input string
+		want  string
 	}{
-		{"test0", "", ""},
-		{"test2", "a0b", "b"},
-		{"test3", "a2b3", "aabbb"},
-		{"test4", "a2\n3", "aa\n\n\n"},
-		{"test5", "a2b 3", "aab   "},
+		{"", ""},
+		{"a0b", "b"},
+		{"a2b3", "aabbb"},
+		{"a2\n3", "aa\n\n\n"},
+		{"a2b 3", "aab   "},
 	}
+
 	for _, tt := range tests {
-		a1 := tt.args
-		t.Run(tt.name, func(t *testing.T) {
-			var got string
-			if got = Unpack(a1); got != tt.want {
-				if got == "" {
-					t.Errorf("WRONG calling: unpack(%q)", a1)
-				} else {
-					t.Errorf("unpack() != %q, want %q", got, tt.want)
-				}
+		t.Run(tt.input, func(t *testing.T) {
+
+			got, err := Unpack(tt.input)
+			if err != nil {
+				t.Errorf("текст ошибки: %q", err.Error())
+				t.SkipNow()
+			}
+			if got != tt.want {
+				t.Errorf("Unpack(%q) != %q", tt.input, got)
 			} else {
-				t.Logf("unpack(%q) == %q", a1, got)
+				t.Logf("[OK] Unpack(%q) == %q", tt.input, tt.want)
 			}
 		})
 	}
 
+}
+
+func TestUnpackErrors(t *testing.T) {
+
 	errTests := []struct {
-		name       string
-		inputStr   string
-		wantResult string
-	}{
-		{"test1", "a11", "a"},
+		wrongStr string
+	}{ // каждый тест должен возвращать ОШИБКУ
+		{"a11a"},
+		{"a12"},
+		{"1a"},
 	}
+
 	for _, tt := range errTests {
-		t.Run(tt.name, func(t *testing.T) {
-			if _, err := Unpack1(tt.inputStr); err != nil {
-				t.Logf("WRONG calling: unpack(%q)", tt.inputStr)
+		t.Run(tt.wrongStr, func(t *testing.T) {
+
+			if _, err := Unpack(tt.wrongStr); err != nil {
+				t.Logf("текст ошибки: %q", err.Error())
+			} else {
+				t.Error("[error expected]")
 			}
 		})
 	}

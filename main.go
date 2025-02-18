@@ -22,6 +22,7 @@ func main() {
 	fmt.Println("flag", flag1)
 
 	var fn1 func(string) string
+
 	switch flag1 {
 	case "--unpack", "--daemon", input:
 		fn1 = packer.Unpack
